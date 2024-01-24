@@ -25,7 +25,8 @@ Download the APK file from the Releases section and install it on your Android d
 1. Clone the repository
 2. Open the project in Android Studio
 3. Build the project
-4. Run the app on your device
+
+You can then run the app on your device (physical or virtual).
 
 ## Code structure
 
@@ -36,8 +37,8 @@ The app was designed using [Material 3 guidelines](https://m3.material.io/), wit
 dynamic colors based on the user's current color theme and a fallback theme. Both light and dark
 themes are supported.
 
-For the entire application, a single `RecombeeClient` instance is created in the `di.RecombeeModule`
-object and injected into the ViewModels using Dagger Hilt.
+For the entire application, a single `RecombeeClient` instance is created in the `RecombeeModule`
+object (in the `di` package) and injected into the ViewModels using Dagger Hilt.
 
 These ViewModels fetch data from Recombee by means of the provided client.
 The received data is then displayed in Composables using Flow.
