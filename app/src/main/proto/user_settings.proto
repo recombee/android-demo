@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+option java_package = "com.recombee.android_app_demo";
+option java_multiple_files = true;
+
+message UserSettings {
+  string user_id = 1;
+  bool onboarding_shown = 2;
+}
