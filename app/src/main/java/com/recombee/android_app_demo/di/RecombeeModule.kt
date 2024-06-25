@@ -13,8 +13,8 @@ object RecombeeModule {
     @Provides
     fun provideRecombeeClient(): RecombeeClient {
         return RecombeeClient(
-            databaseId = "sample-organization-media-sample-db-v2",
-            publicToken = "oc8saFASkgDyRImp5CIrnWO9pIU0STDglMOouLnS0YS40iWVgo61LflhKGSlYdvH",
+            databaseId = "sample-organization-media-sample-db",
+            publicToken = "ZVQBJERql0ctf93Vp8gQ0BdMAvwrEtMi6qzI2qrGcTUukkusdu4jn0TvFeiCp0bV",
             region = Region.EuWest,
             useHttpsByDefault = true,
         )
