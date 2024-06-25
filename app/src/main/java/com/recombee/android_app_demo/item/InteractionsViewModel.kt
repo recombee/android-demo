@@ -1,5 +1,6 @@
 package com.recombee.android_app_demo.item
 
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -155,7 +156,12 @@ class InteractionsViewModel @Inject constructor(
         request: Request<T>, successNotification: Notification
     ) {
         val response = client.sendAsync(request)
+        Log.i("InteractionsViewModel", "sendInteraction: success=${response.isSuccess}")
         if (response.isFailure) {
+            Log.e(
+                "InteractionsViewModel",
+                "sendInteraction: ${response.exceptionOrNull()?.toString() ?: "Unknown error"}"
+            )
             _notificationState.value = Notification.ERROR
             return
         }
