@@ -20,10 +20,10 @@ import javax.inject.Inject
 data class MainScreenState(val items: List<Item>, val userId: String, val recommId: String?)
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
-    private val client: RecombeeClient,
-    private val userSettings: DataStore<UserSettings>,
-) : ViewModel() {
+class MainViewModel
+@Inject
+constructor(private val client: RecombeeClient, private val userSettings: DataStore<UserSettings>) :
+    ViewModel() {
     private val _state = MutableStateFlow<Data<MainScreenState>?>(null)
     val state: StateFlow<Data<MainScreenState>?> = _state.asStateFlow()
 
@@ -37,8 +37,15 @@ class MainViewModel @Inject constructor(
     fun getItems() {
         viewModelScope.launch {
             _isLoading.emit(true)
-            val userId = userSettings.data.first().userId
-            val response = client.sendAsync(
+            _state.emit(fetchItems())
+            _isLoading.emit(false)
+        }
+    }
+
+    private suspend fun fetchItems(): Data<MainScreenState> {
+        val userId = userSettings.data.first().userId
+        val response =
+            client.sendAsync(
                 RecommendItemsToUser(
                     userId = userId,
                     count = 10,
@@ -46,30 +53,13 @@ class MainViewModel @Inject constructor(
                     returnProperties = true,
                 )
             )
-            Log.i("MainViewModel", "getItems: success=${response.isSuccess}")
-            if (response.isFailure) {
-                _state.emit(
-                    Data.Error(
-                        response.exceptionOrNull() ?: Exception("Unknown error")
-                    )
-                )
-                _isLoading.emit(false)
-                return@launch
-            }
-            val items = response.getOrNull()?.recomms?.map {
-                Item(it)
-            } ?: emptyList()
-            Log.i("MainViewModel", "getItems: items=${items.map { it.title }}")
-            _state.emit(
-                Data.Success(
-                    MainScreenState(
-                        items,
-                        userId,
-                        response.getOrNull()?.recommId
-                    )
-                )
-            )
-            _isLoading.emit(false)
+        Log.i("MainViewModel", "getItems: success=${response.isSuccess}")
+        if (response.isFailure) {
+            return Data.Error(response.exceptionOrNull() ?: Exception("Unknown error"))
         }
+        val data = response.getOrNull() ?: return Data.Error(Exception("Unknown error"))
+        val items = data.recomms.map { Item(it) }
+        Log.i("MainViewModel", "getItems: items=${items.map { it.title }}")
+        return Data.Success(MainScreenState(items, userId, data.recommId))
     }
 }
