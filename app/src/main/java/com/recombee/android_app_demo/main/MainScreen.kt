@@ -24,6 +24,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -35,7 +36,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.recombee.android_app_demo.NavigationActions
 import com.recombee.android_app_demo.components.ErrorMessage
 import com.recombee.android_app_demo.components.ItemDisplay
-import com.recombee.android_app_demo.components.PullToRefreshLayout
 import com.recombee.android_app_demo.data.Data
 import com.recombee.android_app_demo.data.Item
 
@@ -47,7 +47,8 @@ fun MainScreen(navActions: NavigationActions, viewModel: MainViewModel = hiltVie
 
     Scaffold(
         topBar = {
-            TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
+            TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 titleContentColor = MaterialTheme.colorScheme.primary,
             ), title = {
@@ -67,7 +68,7 @@ fun MainScreen(navActions: NavigationActions, viewModel: MainViewModel = hiltVie
         },
         contentWindowInsets = WindowInsets(0.dp),
     ) { innerPadding ->
-        PullToRefreshLayout(
+        PullToRefreshBox(
             onRefresh = {
                 viewModel.getItems()
             },

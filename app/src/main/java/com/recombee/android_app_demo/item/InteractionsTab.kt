@@ -89,7 +89,7 @@ fun InteractionsTab(
         ModalBottomSheet(
             onDismissRequest = { viewModel.hideBottomSheet() },
             sheetState = sheetState,
-            windowInsets = WindowInsets(0.dp),
+            contentWindowInsets = { WindowInsets(0.dp) },
         ) {
             Box(Modifier.padding(16.dp)) {
                 when (bottomSheetState) {

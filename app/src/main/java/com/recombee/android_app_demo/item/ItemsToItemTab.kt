@@ -12,8 +12,10 @@ import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -25,9 +27,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.recombee.android_app_demo.NavigationActions
 import com.recombee.android_app_demo.components.ErrorMessage
 import com.recombee.android_app_demo.components.ItemDisplay
-import com.recombee.android_app_demo.components.PullToRefreshLayout
 import com.recombee.android_app_demo.data.Data
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ItemsToItemTab(
     navActions: NavigationActions,
@@ -36,7 +38,7 @@ fun ItemsToItemTab(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
 
-    PullToRefreshLayout(
+    PullToRefreshBox(
         onRefresh = {
             viewModel.getItems()
         },
