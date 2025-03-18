@@ -5,7 +5,6 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -13,11 +12,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.recombee.android_app_demo.item.ItemScreen
 import com.recombee.android_app_demo.main.MainScreen
 import com.recombee.android_app_demo.onboarding.OnboardingScreen
@@ -27,7 +25,7 @@ import com.recombee.android_app_demo.settings.SettingsScreen
 @Composable
 fun NavGraph(
     navController: NavHostController = rememberNavController(),
-    startDestination: String = Routes.MAIN,
+    startDestination: Route = Route.Main,
     navActions: NavigationActions = remember(navController) {
         NavigationActions(navController)
     }
@@ -40,26 +38,17 @@ fun NavGraph(
         popEnterTransition = { popEnterTransition(this) },
         popExitTransition = { popExitTransition(this) },
     ) {
-        composable(route = Routes.MAIN) {
+        composable<Route.Main> {
             MainRoute(navActions)
         }
-        composable(
-            route = Routes.ITEM,
-            arguments = listOf(navArgument(RouteArgs.ID) { type = NavType.StringType },
-                navArgument(RouteArgs.RECOMM_ID) { type = NavType.StringType }),
-        ) {
-            val id = it.arguments?.getString(RouteArgs.ID)
-            if (id == null) {
-                Text("Not found")
-                return@composable
-            }
-            val recommId = it.arguments?.getString(RouteArgs.RECOMM_ID)
-            ItemScreen(navActions, id, recommId)
+        composable<Route.Item> { backStackEntry ->
+            val route = backStackEntry.toRoute<Route.Item>()
+            ItemScreen(navActions, route.id, route.recommId)
         }
-        composable(route = Routes.SETTINGS) {
+        composable<Route.Settings> {
             SettingsScreen(navActions)
         }
-        composable(route = Routes.ONBOARDING) {
+        composable<Route.Onboarding> {
             OnboardingScreen(navActions)
         }
     }

@@ -1,42 +1,47 @@
 package com.recombee.android_app_demo
 
+import androidx.annotation.Keep
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
+import kotlinx.serialization.Serializable
 
+@Keep
+@Serializable
+sealed class Route {
+    @Keep
+    @Serializable
+    data object Main : Route()
 
-object Routes {
-    const val MAIN = "main"
-    const val ITEM = "item/{${RouteArgs.ID}}?${RouteArgs.RECOMM_ID}={${RouteArgs.RECOMM_ID}}"
-    const val SETTINGS = "settings"
-    const val ONBOARDING = "onboarding"
-    fun item(id: String, recommId: String?) = "item/$id".plus(
-        if (recommId != null) "?${RouteArgs.RECOMM_ID}=$recommId" else ""
-    )
-}
+    @Keep
+    @Serializable
+    data class Item(val id: String, val recommId: String?) : Route()
 
-object RouteArgs {
-    const val ID = "id"
-    const val RECOMM_ID = "recomm_id"
+    @Keep
+    @Serializable
+    data object Settings : Route()
+
+    @Keep
+    @Serializable
+    data object Onboarding : Route()
 }
 
 class NavigationActions(private val navController: NavHostController) {
     fun goBack() {
-        if (navController.currentBackStackEntry?.destination?.route != Routes.MAIN) {
-            navController.popBackStack()
+        if (navController.currentBackStackEntry?.destination?.hasRoute(Route.Main::class) == true) {
+            return
         }
+        navController.popBackStack()
     }
-
 
     fun navigateToItem(id: String, recommId: String?) {
-        navController.navigate(Routes.item(id, recommId))
+        navController.navigate(Route.Item(id, recommId))
     }
 
-
     fun navigateToSettings() {
-        navController.navigate(Routes.SETTINGS)
+        navController.navigate(Route.Settings)
     }
 
     fun navigateToOnboarding() {
-        navController.navigate(Routes.ONBOARDING)
+        navController.navigate(Route.Onboarding)
     }
-
 }

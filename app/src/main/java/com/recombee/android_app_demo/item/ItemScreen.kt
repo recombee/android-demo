@@ -1,6 +1,5 @@
 package com.recombee.android_app_demo.item
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
@@ -30,7 +29,7 @@ import androidx.compose.ui.zIndex
 import com.recombee.android_app_demo.NavigationActions
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ItemScreen(navActions: NavigationActions, itemId: String, recommId: String?) {
     val tabs = remember { listOf("Interactions", "Items to Item") }
@@ -40,16 +39,17 @@ fun ItemScreen(navActions: NavigationActions, itemId: String, recommId: String?)
     val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(topBar = {
-        TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.background,
-            titleContentColor = MaterialTheme.colorScheme.primary,
-        ), title = {
-            Text("Item $itemId")
-        }, navigationIcon = {
-            IconButton(onClick = { navActions.goBack() }) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back")
-            }
-        })
+        TopAppBar(
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.background,
+                titleContentColor = MaterialTheme.colorScheme.primary,
+            ), title = {
+                Text("Item $itemId")
+            }, navigationIcon = {
+                IconButton(onClick = { navActions.goBack() }) {
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back")
+                }
+            })
     }, contentWindowInsets = WindowInsets(0.dp), snackbarHost = {
         SnackbarHost(hostState = snackbarHostState)
     }) { innerPadding ->
@@ -86,7 +86,7 @@ fun ItemScreen(navActions: NavigationActions, itemId: String, recommId: String?)
                         }, itemId = itemId, recommId = recommId
                     )
 
-                    1 -> ItemsToItemTab(navActions)
+                    1 -> ItemsToItemTab(itemId, navActions)
                 }
             }
         }

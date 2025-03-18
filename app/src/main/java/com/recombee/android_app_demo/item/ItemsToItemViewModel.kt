@@ -2,32 +2,35 @@ package com.recombee.android_app_demo.item
 
 import android.util.Log
 import androidx.datastore.core.DataStore
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.recombee.android_app_demo.RouteArgs
 import com.recombee.android_app_demo.UserSettings
 import com.recombee.android_app_demo.data.Data
 import com.recombee.android_app_demo.data.Item
 import com.recombee.apiclientkotlin.RecombeeClient
 import com.recombee.apiclientkotlin.requests.RecommendItemsToItem
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 data class ItemsToItemState(val items: List<Item>, val userId: String, val recommId: String?)
 
-@HiltViewModel
-class ItemsToItemViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+@HiltViewModel(assistedFactory = ItemsToItemViewModel.Factory::class)
+class ItemsToItemViewModel @AssistedInject constructor(
     private val client: RecombeeClient,
     private val userSettings: DataStore<UserSettings>,
+    @Assisted private val itemId: String
 ) : ViewModel() {
-    private val itemId: String = checkNotNull(savedStateHandle[RouteArgs.ID])
+    @AssistedFactory
+    interface Factory {
+        fun create(itemId: String): ItemsToItemViewModel
+    }
 
     private val _state = MutableStateFlow<Data<ItemsToItemState>?>(null)
     val state: StateFlow<Data<ItemsToItemState>?> = _state.asStateFlow()

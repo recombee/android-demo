@@ -32,8 +32,12 @@ import com.recombee.android_app_demo.data.Data
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ItemsToItemTab(
+    itemId: String,
     navActions: NavigationActions,
-    viewModel: ItemsToItemViewModel = hiltViewModel()
+    viewModel: ItemsToItemViewModel = hiltViewModel<ItemsToItemViewModel, ItemsToItemViewModel.Factory>(
+        creationCallback = { factory ->
+            factory.create(itemId)
+        })
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
