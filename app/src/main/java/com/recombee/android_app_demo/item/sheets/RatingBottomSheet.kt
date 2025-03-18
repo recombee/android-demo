@@ -32,8 +32,9 @@ fun RatingBottomSheet(onSend: (rating: Double) -> Unit) {
         Slider(
             modifier = Modifier.semantics { contentDescription = "Localized Description" },
             value = rating,
-            onValueChange = { rating = it },
+            onValueChange = { rating = Math.round(it * 100f) / 100f },
             valueRange = -1f..1f,
+            steps = 49,
         )
 
         Text(text = "Rating: $rating", modifier = Modifier.fillMaxWidth())

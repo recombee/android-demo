@@ -32,8 +32,9 @@ fun ViewPortionBottomSheet(onSend: (portion: Double) -> Unit) {
         Slider(
             modifier = Modifier.semantics { contentDescription = "Localized Description" },
             value = portion,
-            onValueChange = { portion = it },
+            onValueChange = { portion = Math.round(it * 100f) / 100f },
             valueRange = 0f..1f,
+            steps = 49,
         )
 
         Text(text = "Portion: $portion", modifier = Modifier.fillMaxWidth())
