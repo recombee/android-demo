@@ -16,7 +16,6 @@ object RecombeeModule {
             databaseId = "sample-organization-media-sample-db",
             publicToken = "ZVQBJERql0ctf93Vp8gQ0BdMAvwrEtMi6qzI2qrGcTUukkusdu4jn0TvFeiCp0bV",
             region = Region.EuWest,
-            useHttpsByDefault = true,
         )
     }
 }
