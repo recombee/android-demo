@@ -78,9 +78,8 @@ dependencies {
     ksp(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
-    implementation(libs.glide.core)
-    annotationProcessor(libs.glide.compiler)
-    implementation(libs.glide.compose)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
 
     implementation(libs.recombee)
     implementation(libs.okhttp)

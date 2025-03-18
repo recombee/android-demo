@@ -2,13 +2,12 @@
 activityCompose = "1.10.1"
 androidGradlePlugin = "8.9.0"
 androidxLifecycle = "2.8.7"
+coil = "3.1.0"
 composeBom = "2025.03.00"
 coreKtx = "1.15.0"
 coreSplashscreen = "1.0.1"
 datastore = "1.1.3"
 espressoCore = "3.6.1"
-glide = "4.14.2"
-glideCompose = "1.0.0-beta01"
 gson = "2.10.1"
 hilt = "2.55"
 hiltNavigationCompose = "1.2.0"
@@ -43,9 +42,8 @@ androidx-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
-glide-core = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
-glide-compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
-glide-compose = { module = "com.github.bumptech.glide:compose", version.ref = "glideCompose" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
