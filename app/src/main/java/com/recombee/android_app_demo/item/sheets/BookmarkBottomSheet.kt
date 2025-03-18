@@ -20,8 +20,6 @@ fun BookmarkBottomSheet(onSend: () -> Unit) {
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
         )
-        Button(onClick = onSend, modifier = Modifier.fillMaxWidth()) {
-            Text(text = "Send")
-        }
+        Button(onClick = onSend, modifier = Modifier.fillMaxWidth()) { Text(text = "Send") }
     }
 }

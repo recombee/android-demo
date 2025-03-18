@@ -8,11 +8,14 @@ data class Item(
     val description: String,
     val images: List<String>,
 ) {
-    constructor(recommendation: Recommendation) : this(
+    constructor(
+        recommendation: Recommendation
+    ) : this(
         itemId = recommendation.id,
         title = recommendation.getValues()["title"] as? String ?: "",
         description = recommendation.getValues()["description"] as? String ?: "",
-        images = (recommendation.getValues()["images"] as? List<*>)?.filterIsInstance<String>()
-            ?: listOf(),
+        images =
+            (recommendation.getValues()["images"] as? List<*>)?.filterIsInstance<String>()
+                ?: listOf(),
     )
 }

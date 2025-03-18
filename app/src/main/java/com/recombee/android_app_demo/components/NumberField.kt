@@ -24,19 +24,19 @@ fun NumberField(
     var number by remember { mutableStateOf(value) }
     val textValue = remember {
         number = value
-        mutableStateOf(value?.toDouble()?.let {
-            if (it == 0.0) {
-                ""
-            } else if (it % 1.0 == 0.0) {
-                it.toInt().toString()
-            } else {
-                it.toString()
-            }
-        } ?: "")
+        mutableStateOf(
+            value?.toDouble()?.let {
+                if (it == 0.0) {
+                    ""
+                } else if (it % 1.0 == 0.0) {
+                    it.toInt().toString()
+                } else {
+                    it.toString()
+                }
+            } ?: ""
+        )
     }
-    val numberRegex = remember {
-        (if (decimal) "-?\\d*[.]?\\d*" else "-?\\d*\\d*").toRegex()
-    }
+    val numberRegex = remember { (if (decimal) "-?\\d*[.]?\\d*" else "-?\\d*\\d*").toRegex() }
 
     OutlinedTextField(
         value = textValue.value,
@@ -49,7 +49,10 @@ fun NumberField(
         },
         label = { if (label != null) Text(label) },
         singleLine = true,
-        keyboardOptions = KeyboardOptions(keyboardType = if (decimal) KeyboardType.Decimal else KeyboardType.Number),
+        keyboardOptions =
+            KeyboardOptions(
+                keyboardType = if (decimal) KeyboardType.Decimal else KeyboardType.Number
+            ),
         modifier = modifier,
     )
 }
@@ -57,7 +60,5 @@ fun NumberField(
 @Preview
 @Composable
 fun NumberFieldPreview() {
-    RecomflixTheme {
-        NumberField(0.0, label = "Test") {}
-    }
+    RecomflixTheme { NumberField(0.0, label = "Test") {} }
 }

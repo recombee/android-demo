@@ -8,21 +8,13 @@ import kotlinx.serialization.Serializable
 @Keep
 @Serializable
 sealed class Route {
-    @Keep
-    @Serializable
-    data object Main : Route()
+    @Keep @Serializable data object Main : Route()
 
-    @Keep
-    @Serializable
-    data class Item(val id: String, val recommId: String?) : Route()
+    @Keep @Serializable data class Item(val id: String, val recommId: String?) : Route()
 
-    @Keep
-    @Serializable
-    data object Settings : Route()
+    @Keep @Serializable data object Settings : Route()
 
-    @Keep
-    @Serializable
-    data object Onboarding : Route()
+    @Keep @Serializable data object Onboarding : Route()
 }
 
 class NavigationActions(private val navController: NavHostController) {

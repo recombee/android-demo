@@ -48,34 +48,28 @@ fun MainScreen(navActions: NavigationActions, viewModel: MainViewModel = hiltVie
     Scaffold(
         topBar = {
             TopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                titleContentColor = MaterialTheme.colorScheme.primary,
-            ), title = {
-                Text("Recombee Android Demo")
-            }, actions = {
-                IconButton(onClick = { navActions.navigateToOnboarding() }) {
-                    Icon(
-                        imageVector = Icons.Outlined.Info, contentDescription = "Info"
-                    )
-                }
-                IconButton(onClick = { navActions.navigateToSettings() }) {
-                    Icon(
-                        imageVector = Icons.Filled.Settings, contentDescription = "User"
-                    )
-                }
-            })
+                colors =
+                    TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        titleContentColor = MaterialTheme.colorScheme.primary,
+                    ),
+                title = { Text("Recombee Android Demo") },
+                actions = {
+                    IconButton(onClick = { navActions.navigateToOnboarding() }) {
+                        Icon(imageVector = Icons.Outlined.Info, contentDescription = "Info")
+                    }
+                    IconButton(onClick = { navActions.navigateToSettings() }) {
+                        Icon(imageVector = Icons.Filled.Settings, contentDescription = "User")
+                    }
+                },
+            )
         },
         contentWindowInsets = WindowInsets(0.dp),
     ) { innerPadding ->
         PullToRefreshBox(
-            onRefresh = {
-                viewModel.getItems()
-            },
+            onRefresh = { viewModel.getItems() },
             isRefreshing = isLoading and (uiState != null),
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize(),
+            modifier = Modifier.padding(innerPadding).fillMaxSize(),
         ) {
             when (uiState) {
                 null -> {
@@ -91,11 +85,12 @@ fun MainScreen(navActions: NavigationActions, viewModel: MainViewModel = hiltVie
                 is Data.Success -> {
                     Column(Modifier.fillMaxSize()) {
                         val state = (uiState as Data.Success).data
-                        ItemsList(itemList = state.items, onItemClick = { itemId ->
-                            navActions.navigateToItem(
-                                itemId, state.recommId
-                            )
-                        })
+                        ItemsList(
+                            itemList = state.items,
+                            onItemClick = { itemId ->
+                                navActions.navigateToItem(itemId, state.recommId)
+                            },
+                        )
                     }
                 }
 
@@ -114,7 +109,7 @@ fun ItemsList(itemList: List<Item>, onItemClick: (itemId: String) -> Unit) {
             Text(
                 "Top Picks for You",
                 Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 8.dp),
-                style = MaterialTheme.typography.headlineSmall
+                style = MaterialTheme.typography.headlineSmall,
             )
         }
         items(items = itemList, key = { item -> item.itemId }, contentType = { "item" }) {

@@ -22,10 +22,12 @@ import kotlinx.coroutines.launch
 data class ItemsToItemState(val items: List<Item>, val userId: String, val recommId: String?)
 
 @HiltViewModel(assistedFactory = ItemsToItemViewModel.Factory::class)
-class ItemsToItemViewModel @AssistedInject constructor(
+class ItemsToItemViewModel
+@AssistedInject
+constructor(
     private val client: RecombeeClient,
     private val userSettings: DataStore<UserSettings>,
-    @Assisted private val itemId: String
+    @Assisted private val itemId: String,
 ) : ViewModel() {
     @AssistedFactory
     interface Factory {
@@ -46,37 +48,26 @@ class ItemsToItemViewModel @AssistedInject constructor(
         viewModelScope.launch {
             _isLoading.emit(true)
             val userId = userSettings.data.first().userId
-            val response = client.sendAsync(
-                RecommendItemsToItem(
-                    itemId = itemId,
-                    targetUserId = userId,
-                    count = 10,
-                    scenario = "related-assets",
-                    returnProperties = true,
-                )
-            )
-            Log.i("ItemsToItemViewModel", "getItems: response=$response")
-            if (response.isFailure) {
-                _state.emit(
-                    Data.Error(
-                        response.exceptionOrNull() ?: Exception("Unknown error")
+            val response =
+                client.sendAsync(
+                    RecommendItemsToItem(
+                        itemId = itemId,
+                        targetUserId = userId,
+                        count = 10,
+                        scenario = "related-assets",
+                        returnProperties = true,
                     )
                 )
+            Log.i("ItemsToItemViewModel", "getItems: response=$response")
+            if (response.isFailure) {
+                _state.emit(Data.Error(response.exceptionOrNull() ?: Exception("Unknown error")))
                 _isLoading.emit(false)
                 return@launch
             }
-            val items = response.getOrNull()?.recomms?.map {
-                Item(it)
-            } ?: emptyList()
+            val items = response.getOrNull()?.recomms?.map { Item(it) } ?: emptyList()
             Log.i("ItemsToItemViewModel", "getItems: items=$items")
             _state.emit(
-                Data.Success(
-                    ItemsToItemState(
-                        items,
-                        userId,
-                        response.getOrNull()?.recommId
-                    )
-                )
+                Data.Success(ItemsToItemState(items, userId, response.getOrNull()?.recommId))
             )
             _isLoading.emit(false)
         }

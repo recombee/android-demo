@@ -34,24 +34,22 @@ fun PurchaseBottomSheet(onSend: (amount: Double?, price: Double?, profit: Double
                 value = amount,
                 onValueChange = { amount = it?.toDouble() },
                 label = "Amount",
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
             NumberField(
                 value = price,
                 onValueChange = { price = it?.toDouble() },
                 label = "Price",
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
             NumberField(
                 value = profit,
                 onValueChange = { profit = it?.toDouble() },
                 label = "Profit",
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
         }
-        Button(
-            onClick = { onSend(amount, price, profit) }, modifier = Modifier.fillMaxWidth()
-        ) {
+        Button(onClick = { onSend(amount, price, profit) }, modifier = Modifier.fillMaxWidth()) {
             Text(text = "Send")
         }
     }

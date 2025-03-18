@@ -33,13 +33,13 @@ fun CartAdditionBottomSheet(onSend: (amount: Double?, price: Double?) -> Unit) {
                 value = amount,
                 onValueChange = { amount = it?.toDouble() },
                 label = "Amount",
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
             NumberField(
                 value = price,
                 onValueChange = { price = it?.toDouble() },
                 label = "Price",
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
         }
         Button(onClick = { onSend(amount, price) }, modifier = Modifier.fillMaxWidth()) {

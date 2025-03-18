@@ -35,32 +35,30 @@ fun InteractionsTab(
     showSnackbar: (String, () -> Unit) -> Unit,
     itemId: String,
     recommId: String?,
-    viewModel: InteractionsViewModel = hiltViewModel()
+    viewModel: InteractionsViewModel = hiltViewModel(),
 ) {
     val bottomSheetState by viewModel.bottomSheetState.collectAsStateWithLifecycle()
-    val sheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = false
-    )
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
     val notificationState by viewModel.notificationState.collectAsStateWithLifecycle()
 
     LaunchedEffect(notificationState) {
-        val message = when (notificationState) {
-            Notification.NONE -> return@LaunchedEffect
-            Notification.BOOKMARK_SUCCESS -> "Bookmark sent"
-            Notification.CART_ADDITION_SUCCESS -> "Cart addition sent"
-            Notification.DETAIL_VIEW_SUCCESS -> "Detail view sent"
-            Notification.PURCHASE_SUCCESS -> "Purchase sent"
-            Notification.RATING_SUCCESS -> "Rating sent"
-            Notification.VIEW_PORTION_SUCCESS -> "View portion sent"
-            Notification.ERROR -> "An error occurred"
-        }
+        val message =
+            when (notificationState) {
+                Notification.NONE -> return@LaunchedEffect
+                Notification.BOOKMARK_SUCCESS -> "Bookmark sent"
+                Notification.CART_ADDITION_SUCCESS -> "Cart addition sent"
+                Notification.DETAIL_VIEW_SUCCESS -> "Detail view sent"
+                Notification.PURCHASE_SUCCESS -> "Purchase sent"
+                Notification.RATING_SUCCESS -> "Rating sent"
+                Notification.VIEW_PORTION_SUCCESS -> "View portion sent"
+                Notification.ERROR -> "An error occurred"
+            }
         showSnackbar(message) { viewModel.dismissNotification() }
     }
 
     Column(
-        Modifier
-            .fillMaxSize()
-            .padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)
+        Modifier.fillMaxSize().padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(
             text = "User-Item Interactions",
@@ -68,20 +66,19 @@ fun InteractionsTab(
             modifier = Modifier.padding(bottom = 8.dp),
         )
         listOf(
-            BottomSheetState.BOOKMARK to "Bookmark",
-            BottomSheetState.CART_ADDITION to "Cart Addition",
-            BottomSheetState.DETAIL_VIEW to "Detail View",
-            BottomSheetState.PURCHASE to "Purchase",
-            BottomSheetState.RATING to "Rating",
-            BottomSheetState.VIEW_PORTION to "View Portion",
-        ).map {
-            val (sheetType, text) = it
-            FilledTonalButton(onClick = {
-                viewModel.showBottomSheet(sheetType)
-            }) {
-                Text(text = text)
+                BottomSheetState.BOOKMARK to "Bookmark",
+                BottomSheetState.CART_ADDITION to "Cart Addition",
+                BottomSheetState.DETAIL_VIEW to "Detail View",
+                BottomSheetState.PURCHASE to "Purchase",
+                BottomSheetState.RATING to "Rating",
+                BottomSheetState.VIEW_PORTION to "View Portion",
+            )
+            .map {
+                val (sheetType, text) = it
+                FilledTonalButton(onClick = { viewModel.showBottomSheet(sheetType) }) {
+                    Text(text = text)
+                }
             }
-        }
         Text(text = "Recommendation ID: $recommId")
     }
 
@@ -93,47 +90,53 @@ fun InteractionsTab(
         ) {
             Box(Modifier.padding(16.dp)) {
                 when (bottomSheetState) {
-                    BottomSheetState.BOOKMARK -> BookmarkBottomSheet(onSend = {
-                        viewModel.sendBookmark(
-                            itemId, recommId
+                    BottomSheetState.BOOKMARK ->
+                        BookmarkBottomSheet(
+                            onSend = {
+                                viewModel.sendBookmark(itemId, recommId)
+                                viewModel.hideBottomSheet()
+                            }
                         )
-                        viewModel.hideBottomSheet()
-                    })
 
-                    BottomSheetState.CART_ADDITION -> CartAdditionBottomSheet(onSend = { amount, price ->
-                        viewModel.sendCartAddition(
-                            itemId, amount, price, recommId
+                    BottomSheetState.CART_ADDITION ->
+                        CartAdditionBottomSheet(
+                            onSend = { amount, price ->
+                                viewModel.sendCartAddition(itemId, amount, price, recommId)
+                                viewModel.hideBottomSheet()
+                            }
                         )
-                        viewModel.hideBottomSheet()
-                    })
 
-                    BottomSheetState.DETAIL_VIEW -> DetailViewBottomSheet(onSend = { duration ->
-                        viewModel.sendDetailView(
-                            itemId, duration, recommId
+                    BottomSheetState.DETAIL_VIEW ->
+                        DetailViewBottomSheet(
+                            onSend = { duration ->
+                                viewModel.sendDetailView(itemId, duration, recommId)
+                                viewModel.hideBottomSheet()
+                            }
                         )
-                        viewModel.hideBottomSheet()
-                    })
 
-                    BottomSheetState.PURCHASE -> PurchaseBottomSheet(onSend = { amount, price, profit ->
-                        viewModel.sendPurchase(
-                            itemId, amount, price, profit, recommId
+                    BottomSheetState.PURCHASE ->
+                        PurchaseBottomSheet(
+                            onSend = { amount, price, profit ->
+                                viewModel.sendPurchase(itemId, amount, price, profit, recommId)
+                                viewModel.hideBottomSheet()
+                            }
                         )
-                        viewModel.hideBottomSheet()
-                    })
 
-                    BottomSheetState.RATING -> RatingBottomSheet(onSend = { rating ->
-                        viewModel.sendRating(
-                            itemId, rating, recommId
+                    BottomSheetState.RATING ->
+                        RatingBottomSheet(
+                            onSend = { rating ->
+                                viewModel.sendRating(itemId, rating, recommId)
+                                viewModel.hideBottomSheet()
+                            }
                         )
-                        viewModel.hideBottomSheet()
-                    })
 
-                    BottomSheetState.VIEW_PORTION -> ViewPortionBottomSheet(onSend = { portion ->
-                        viewModel.sendViewPortion(
-                            itemId, portion, recommId
+                    BottomSheetState.VIEW_PORTION ->
+                        ViewPortionBottomSheet(
+                            onSend = { portion ->
+                                viewModel.sendViewPortion(itemId, portion, recommId)
+                                viewModel.hideBottomSheet()
+                            }
                         )
-                        viewModel.hideBottomSheet()
-                    })
 
                     else -> Unit
                 }

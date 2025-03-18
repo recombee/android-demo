@@ -34,18 +34,16 @@ import com.recombee.android_app_demo.data.Data
 fun ItemsToItemTab(
     itemId: String,
     navActions: NavigationActions,
-    viewModel: ItemsToItemViewModel = hiltViewModel<ItemsToItemViewModel, ItemsToItemViewModel.Factory>(
-        creationCallback = { factory ->
-            factory.create(itemId)
-        })
+    viewModel: ItemsToItemViewModel =
+        hiltViewModel<ItemsToItemViewModel, ItemsToItemViewModel.Factory>(
+            creationCallback = { factory -> factory.create(itemId) }
+        ),
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
 
     PullToRefreshBox(
-        onRefresh = {
-            viewModel.getItems()
-        },
+        onRefresh = { viewModel.getItems() },
         isRefreshing = isLoading and (uiState != null),
     ) {
         when (uiState) {
@@ -69,22 +67,23 @@ fun ItemsToItemTab(
                                 top = 16.dp,
                                 start = 16.dp,
                                 end = 16.dp,
-                                bottom = 8.dp
+                                bottom = 8.dp,
                             ),
-                            style = MaterialTheme.typography.headlineSmall
+                            style = MaterialTheme.typography.headlineSmall,
                         )
                     }
                     items(
                         items = state.items,
                         key = { item -> item.itemId },
-                        contentType = { "item" }) {
+                        contentType = { "item" },
+                    ) {
                         ItemDisplay(
                             it,
-                            modifier = Modifier.clickable {
-                                navActions.navigateToItem(
-                                    it.itemId, state.recommId
-                                )
-                            })
+                            modifier =
+                                Modifier.clickable {
+                                    navActions.navigateToItem(it.itemId, state.recommId)
+                                },
+                        )
                     }
                     item(contentType = "footer") {
                         Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
@@ -97,5 +96,4 @@ fun ItemsToItemTab(
             }
         }
     }
-
 }

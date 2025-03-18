@@ -22,18 +22,31 @@ import java.time.Instant
 import javax.inject.Inject
 
 enum class BottomSheetState {
-    NONE, BOOKMARK, CART_ADDITION, DETAIL_VIEW, PURCHASE, RATING, VIEW_PORTION
+    NONE,
+    BOOKMARK,
+    CART_ADDITION,
+    DETAIL_VIEW,
+    PURCHASE,
+    RATING,
+    VIEW_PORTION,
 }
 
 enum class Notification {
-    NONE, BOOKMARK_SUCCESS, CART_ADDITION_SUCCESS, DETAIL_VIEW_SUCCESS, PURCHASE_SUCCESS, RATING_SUCCESS, VIEW_PORTION_SUCCESS, ERROR,
+    NONE,
+    BOOKMARK_SUCCESS,
+    CART_ADDITION_SUCCESS,
+    DETAIL_VIEW_SUCCESS,
+    PURCHASE_SUCCESS,
+    RATING_SUCCESS,
+    VIEW_PORTION_SUCCESS,
+    ERROR,
 }
 
 @HiltViewModel
-class InteractionsViewModel @Inject constructor(
-    private val client: RecombeeClient,
-    private val userSettings: DataStore<UserSettings>,
-) : ViewModel() {
+class InteractionsViewModel
+@Inject
+constructor(private val client: RecombeeClient, private val userSettings: DataStore<UserSettings>) :
+    ViewModel() {
     private val _bottomSheetState = MutableStateFlow(BottomSheetState.NONE)
     val bottomSheetState = _bottomSheetState.asStateFlow()
 
@@ -60,14 +73,13 @@ class InteractionsViewModel @Inject constructor(
                     itemId = itemId,
                     timestamp = Instant.now(),
                     recommId = recommId,
-                ), Notification.BOOKMARK_SUCCESS
+                ),
+                Notification.BOOKMARK_SUCCESS,
             )
         }
     }
 
-    fun sendCartAddition(
-        itemId: String, amount: Double?, price: Double?, recommId: String?
-    ) {
+    fun sendCartAddition(itemId: String, amount: Double?, price: Double?, recommId: String?) {
         viewModelScope.launch {
             sendInteraction(
                 AddCartAddition(
@@ -77,14 +89,13 @@ class InteractionsViewModel @Inject constructor(
                     amount = amount,
                     price = price,
                     recommId = recommId,
-                ), Notification.CART_ADDITION_SUCCESS
+                ),
+                Notification.CART_ADDITION_SUCCESS,
             )
         }
     }
 
-    fun sendDetailView(
-        itemId: String, duration: Long?, recommId: String?
-    ) {
+    fun sendDetailView(itemId: String, duration: Long?, recommId: String?) {
         viewModelScope.launch {
             sendInteraction(
                 AddDetailView(
@@ -93,13 +104,18 @@ class InteractionsViewModel @Inject constructor(
                     timestamp = Instant.now(),
                     duration = duration,
                     recommId = recommId,
-                ), Notification.DETAIL_VIEW_SUCCESS
+                ),
+                Notification.DETAIL_VIEW_SUCCESS,
             )
         }
     }
 
     fun sendPurchase(
-        itemId: String, amount: Double?, price: Double?, profit: Double?, recommId: String?
+        itemId: String,
+        amount: Double?,
+        price: Double?,
+        profit: Double?,
+        recommId: String?,
     ) {
         viewModelScope.launch {
             sendInteraction(
@@ -111,14 +127,13 @@ class InteractionsViewModel @Inject constructor(
                     price = price,
                     profit = profit,
                     recommId = recommId,
-                ), Notification.PURCHASE_SUCCESS
+                ),
+                Notification.PURCHASE_SUCCESS,
             )
         }
     }
 
-    fun sendRating(
-        itemId: String, rating: Double, recommId: String?
-    ) {
+    fun sendRating(itemId: String, rating: Double, recommId: String?) {
         viewModelScope.launch {
             sendInteraction(
                 AddRating(
@@ -127,14 +142,13 @@ class InteractionsViewModel @Inject constructor(
                     timestamp = Instant.now(),
                     rating = rating,
                     recommId = recommId,
-                ), Notification.RATING_SUCCESS
+                ),
+                Notification.RATING_SUCCESS,
             )
         }
     }
 
-    fun sendViewPortion(
-        itemId: String, portion: Double, recommId: String?
-    ) {
+    fun sendViewPortion(itemId: String, portion: Double, recommId: String?) {
         viewModelScope.launch {
             sendInteraction(
                 SetViewPortion(
@@ -143,7 +157,8 @@ class InteractionsViewModel @Inject constructor(
                     timestamp = Instant.now(),
                     portion = portion,
                     recommId = recommId,
-                ), Notification.VIEW_PORTION_SUCCESS
+                ),
+                Notification.VIEW_PORTION_SUCCESS,
             )
         }
     }
@@ -153,14 +168,15 @@ class InteractionsViewModel @Inject constructor(
     }
 
     private suspend inline fun <reified T> sendInteraction(
-        request: Request<T>, successNotification: Notification
+        request: Request<T>,
+        successNotification: Notification,
     ) {
         val response = client.sendAsync(request)
         Log.i("InteractionsViewModel", "sendInteraction: success=${response.isSuccess}")
         if (response.isFailure) {
             Log.e(
                 "InteractionsViewModel",
-                "sendInteraction: ${response.exceptionOrNull()?.toString() ?: "Unknown error"}"
+                "sendInteraction: ${response.exceptionOrNull()?.toString() ?: "Unknown error"}",
             )
             _notificationState.value = Notification.ERROR
             return

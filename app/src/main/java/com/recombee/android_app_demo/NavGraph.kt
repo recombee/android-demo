@@ -26,9 +26,7 @@ import com.recombee.android_app_demo.settings.SettingsScreen
 fun NavGraph(
     navController: NavHostController = rememberNavController(),
     startDestination: Route = Route.Main,
-    navActions: NavigationActions = remember(navController) {
-        NavigationActions(navController)
-    }
+    navActions: NavigationActions = remember(navController) { NavigationActions(navController) },
 ) {
     NavHost(
         navController = navController,
@@ -38,19 +36,13 @@ fun NavGraph(
         popEnterTransition = { popEnterTransition(this) },
         popExitTransition = { popExitTransition(this) },
     ) {
-        composable<Route.Main> {
-            MainRoute(navActions)
-        }
+        composable<Route.Main> { MainRoute(navActions) }
         composable<Route.Item> { backStackEntry ->
             val route = backStackEntry.toRoute<Route.Item>()
             ItemScreen(navActions, route.id, route.recommId)
         }
-        composable<Route.Settings> {
-            SettingsScreen(navActions)
-        }
-        composable<Route.Onboarding> {
-            OnboardingScreen(navActions)
-        }
+        composable<Route.Settings> { SettingsScreen(navActions) }
+        composable<Route.Onboarding> { OnboardingScreen(navActions) }
     }
 }
 
@@ -69,24 +61,28 @@ fun MainRoute(navActions: NavigationActions, viewModel: OnboardingViewModel = hi
 
 fun enterTransition(scope: AnimatedContentTransitionScope<NavBackStackEntry>): EnterTransition {
     return scope.slideIntoContainer(
-        AnimatedContentTransitionScope.SlideDirection.Left, animationSpec = tween(200)
+        AnimatedContentTransitionScope.SlideDirection.Left,
+        animationSpec = tween(200),
     )
 }
 
 fun exitTransition(scope: AnimatedContentTransitionScope<NavBackStackEntry>): ExitTransition {
     return scope.slideOutOfContainer(
-        AnimatedContentTransitionScope.SlideDirection.Left, animationSpec = tween(200)
+        AnimatedContentTransitionScope.SlideDirection.Left,
+        animationSpec = tween(200),
     )
 }
 
 fun popEnterTransition(scope: AnimatedContentTransitionScope<NavBackStackEntry>): EnterTransition {
     return scope.slideIntoContainer(
-        AnimatedContentTransitionScope.SlideDirection.Right, animationSpec = tween(200)
+        AnimatedContentTransitionScope.SlideDirection.Right,
+        animationSpec = tween(200),
     )
 }
 
 fun popExitTransition(scope: AnimatedContentTransitionScope<NavBackStackEntry>): ExitTransition {
     return scope.slideOutOfContainer(
-        AnimatedContentTransitionScope.SlideDirection.Right, animationSpec = tween(200)
+        AnimatedContentTransitionScope.SlideDirection.Right,
+        animationSpec = tween(200),
     )
 }

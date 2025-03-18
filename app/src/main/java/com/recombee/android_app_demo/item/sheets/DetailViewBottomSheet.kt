@@ -32,7 +32,7 @@ fun DetailViewBottomSheet(onSend: (duration: Long?) -> Unit) {
             onValueChange = { duration = it?.toLong() },
             label = "Duration",
             decimal = false,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
         Button(onClick = { onSend(duration) }, modifier = Modifier.fillMaxWidth()) {
             Text(text = "Send")

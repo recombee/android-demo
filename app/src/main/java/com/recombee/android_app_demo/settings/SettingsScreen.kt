@@ -26,45 +26,35 @@ import com.recombee.android_app_demo.NavigationActions
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(
-    navActions: NavigationActions,
-    viewModel: SettingsViewModel = hiltViewModel()
-) {
+fun SettingsScreen(navActions: NavigationActions, viewModel: SettingsViewModel = hiltViewModel()) {
     val userId by viewModel.userId.collectAsStateWithLifecycle(initialValue = "")
 
     Scaffold(
         topBar = {
             TopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
-                ),
-                title = {
-                    Text("Settings")
-                },
+                colors =
+                    TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        titleContentColor = MaterialTheme.colorScheme.primary,
+                    ),
+                title = { Text("Settings") },
                 navigationIcon = {
                     IconButton(onClick = { navActions.goBack() }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back")
                     }
-                }
+                },
             )
         },
         contentWindowInsets = WindowInsets(0.dp),
     ) { innerPadding ->
-        Column(
-            Modifier
-                .padding(innerPadding)
-                .padding(16.dp)
-        ) {
+        Column(Modifier.padding(innerPadding).padding(16.dp)) {
             Text("User Settings", style = MaterialTheme.typography.headlineSmall)
             Column(
                 Modifier.padding(vertical = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 Text("User ID:\n$userId")
-                Button(onClick = { viewModel.resetUserId() }) {
-                    Text("Reset User ID")
-                }
+                Button(onClick = { viewModel.resetUserId() }) { Text("Reset User ID") }
                 if (BuildConfig.DEBUG) {
                     Button(onClick = { viewModel.resetOnboardingShown() }) {
                         Text("Reset Onboarding")

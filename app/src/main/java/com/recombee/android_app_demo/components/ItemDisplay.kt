@@ -30,7 +30,6 @@ import coil3.compose.AsyncImagePreviewHandler
 import coil3.compose.LocalAsyncImagePreviewHandler
 import com.recombee.android_app_demo.data.Item
 
-
 @Composable
 fun ItemDisplay(item: Item, modifier: Modifier = Modifier) {
     Row(
@@ -39,7 +38,7 @@ fun ItemDisplay(item: Item, modifier: Modifier = Modifier) {
             .padding(horizontal = 16.dp, vertical = 12.dp)
             .height(IntrinsicSize.Min),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         if (item.images.isNotEmpty()) {
             AsyncImage(
@@ -48,23 +47,17 @@ fun ItemDisplay(item: Item, modifier: Modifier = Modifier) {
                 clipToBounds = true,
                 contentScale = ContentScale.FillBounds,
                 placeholder = ColorPainter(Color.LightGray),
-                modifier = Modifier
-                    .width(64.dp)
-                    .clip(RoundedCornerShape(8.dp)),
+                modifier = Modifier.width(64.dp).clip(RoundedCornerShape(8.dp)),
                 alignment = Alignment.CenterStart,
             )
         }
-        Column(
-            Modifier
-                .padding(horizontal = 4.dp)
-                .fillMaxWidth()
-        ) {
+        Column(Modifier.padding(horizontal = 4.dp).fillMaxWidth()) {
             Text(
                 item.title,
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(bottom = 4.dp),
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
             Text(item.description, maxLines = 3, overflow = TextOverflow.Ellipsis)
         }
@@ -75,16 +68,14 @@ fun ItemDisplay(item: Item, modifier: Modifier = Modifier) {
 @Preview
 @Composable
 fun ItemDisplayPreview() {
-    val previewHandler = AsyncImagePreviewHandler {
-        ColorImage(Color.LightGray.toArgb(), 200, 300)
-    }
+    val previewHandler = AsyncImagePreviewHandler { ColorImage(Color.LightGray.toArgb(), 200, 300) }
     CompositionLocalProvider(LocalAsyncImagePreviewHandler provides previewHandler) {
         ItemDisplay(
             Item(
                 itemId = "1",
                 title = "Title",
                 description = "Description",
-                images = listOf("https://picsum.photos/200/300")
+                images = listOf("https://picsum.photos/200/300"),
             )
         )
     }

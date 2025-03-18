@@ -23,11 +23,12 @@ import java.util.UUID
 import javax.inject.Singleton
 
 object UserSettingsSerializer : Serializer<UserSettings> {
-    override val defaultValue: UserSettings = UserSettings.getDefaultInstance()
-        .toBuilder()
-        .setUserId(UUID.randomUUID().toString())
-        .setOnboardingShown(false)
-        .build()
+    override val defaultValue: UserSettings =
+        UserSettings.getDefaultInstance()
+            .toBuilder()
+            .setUserId(UUID.randomUUID().toString())
+            .setOnboardingShown(false)
+            .build()
 
     override suspend fun readFrom(input: InputStream): UserSettings {
         try {
@@ -35,7 +36,6 @@ object UserSettingsSerializer : Serializer<UserSettings> {
         } catch (exception: InvalidProtocolBufferException) {
             throw CorruptionException("Cannot read proto.", exception)
         }
-
     }
 
     override suspend fun writeTo(t: UserSettings, output: OutputStream) = t.writeTo(output)
@@ -49,17 +49,14 @@ private const val USER_SETTINGS_FILE = "$USER_SETTINGS_NAME.pb"
 object UserSettingsModule {
     @Singleton
     @Provides
-    fun provideUserSettings(
-        @ApplicationContext context: Context,
-    ): DataStore<UserSettings> {
+    fun provideUserSettings(@ApplicationContext context: Context): DataStore<UserSettings> {
         return DataStoreFactory.create(
-            corruptionHandler = ReplaceFileCorruptionHandler {
-                UserSettingsSerializer.defaultValue
-            },
+            corruptionHandler =
+                ReplaceFileCorruptionHandler { UserSettingsSerializer.defaultValue },
             migrations = listOf(),
             serializer = UserSettingsSerializer,
             produceFile = { context.dataStoreFile(USER_SETTINGS_FILE) },
-            scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+            scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
         )
     }
 }

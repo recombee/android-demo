@@ -11,28 +11,21 @@ import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingsViewModel @Inject constructor(
-    private val userSettings: DataStore<UserSettings>,
-) : ViewModel() {
+class SettingsViewModel @Inject constructor(private val userSettings: DataStore<UserSettings>) :
+    ViewModel() {
     val userId = userSettings.data.map { it.userId }
 
     fun resetUserId() {
         viewModelScope.launch {
             userSettings.updateData {
-                it.toBuilder()
-                    .setUserId(UUID.randomUUID().toString())
-                    .build()
+                it.toBuilder().setUserId(UUID.randomUUID().toString()).build()
             }
         }
     }
 
     fun resetOnboardingShown() {
         viewModelScope.launch {
-            userSettings.updateData {
-                it.toBuilder()
-                    .setOnboardingShown(false)
-                    .build()
-            }
+            userSettings.updateData { it.toBuilder().setOnboardingShown(false).build() }
         }
     }
 }

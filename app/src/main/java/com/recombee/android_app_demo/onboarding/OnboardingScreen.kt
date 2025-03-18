@@ -36,13 +36,11 @@ fun OnboardingScreen(
 ) {
     // only get the value once to prevent flashes when the value is updated
     val vmOnboardingShown by viewModel.onboardingShown.collectAsStateWithLifecycle(null)
-    val onboardingShown by remember(vmOnboardingShown != null) {
-        mutableStateOf(vmOnboardingShown ?: false)
-    }
+    val onboardingShown by
+        remember(vmOnboardingShown != null) { mutableStateOf(vmOnboardingShown == true) }
 
     Surface(
-        Modifier
-            .windowInsetsPadding(WindowInsets.systemBars)
+        Modifier.windowInsetsPadding(WindowInsets.systemBars)
             .fillMaxSize()
             .padding(16.dp)
             .verticalScroll(rememberScrollState())
@@ -52,13 +50,11 @@ fun OnboardingScreen(
                 Image(
                     painterResource(R.drawable.ic_launcher_foreground),
                     contentDescription = "Recomflix logo",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.CenterHorizontally)
+                    modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally),
                 )
                 Column(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
                     Text(
                         text = if (onboardingShown) "About the" else "Welcome to the",
@@ -74,27 +70,22 @@ fun OnboardingScreen(
                 }
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     listOf(
-                        "This application showcases the integration of Recombee's recommendation API within an Android application, utilizing a dataset comprised of movies.",
-                        "The home screen shows the \"Items to User\" scenario (Top Picks for You).",
-                        "By tapping on a movie, you can either see \"Items to Item\" recommendations (Related Movies) or send interactions (e.g. rating or how much of a movie has been watched).",
-                        "After sending interactions, you can pull to refresh any movie list. The recommended movies are updated to reflect this new data.",
-                    ).map {
-                        Text(it)
-                    }
+                            "This application showcases the integration of Recombee's recommendation API within an Android application, utilizing a dataset comprised of movies.",
+                            "The home screen shows the \"Items to User\" scenario (Top Picks for You).",
+                            "By tapping on a movie, you can either see \"Items to Item\" recommendations (Related Movies) or send interactions (e.g. rating or how much of a movie has been watched).",
+                            "After sending interactions, you can pull to refresh any movie list. The recommended movies are updated to reflect this new data.",
+                        )
+                        .map { Text(it) }
                 }
             }
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 if (onboardingShown) {
-                    Button(onClick = { navActions.goBack() }) {
-                        Text("Go back")
-                    }
+                    Button(onClick = { navActions.goBack() }) { Text("Go back") }
                 } else {
-                    Button(onClick = { viewModel.setOnboardingShown() }) {
-                        Text("Let's go!")
-                    }
+                    Button(onClick = { viewModel.setOnboardingShown() }) { Text("Let's go!") }
                 }
             }
         }

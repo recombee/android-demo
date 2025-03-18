@@ -38,53 +38,52 @@ fun ItemScreen(navActions: NavigationActions, itemId: String, recommId: String?)
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    Scaffold(topBar = {
-        TopAppBar(
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.background,
-                titleContentColor = MaterialTheme.colorScheme.primary,
-            ), title = {
-                Text("Item $itemId")
-            }, navigationIcon = {
-                IconButton(onClick = { navActions.goBack() }) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back")
-                }
-            })
-    }, contentWindowInsets = WindowInsets(0.dp), snackbarHost = {
-        SnackbarHost(hostState = snackbarHostState)
-    }) { innerPadding ->
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                colors =
+                    TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.background,
+                        titleContentColor = MaterialTheme.colorScheme.primary,
+                    ),
+                title = { Text("Item $itemId") },
+                navigationIcon = {
+                    IconButton(onClick = { navActions.goBack() }) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back")
+                    }
+                },
+            )
+        },
+        contentWindowInsets = WindowInsets(0.dp),
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+    ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
-            PrimaryTabRow(
-                selectedTabIndex = pagerState.currentPage
-            ) {
+            PrimaryTabRow(selectedTabIndex = pagerState.currentPage) {
                 Tab(
                     selected = pagerState.currentPage == 0,
                     onClick = { scope.launch { pagerState.animateScrollToPage(0) } },
-                    text = {
-                        Text(
-                            text = tabs[0], maxLines = 2, overflow = TextOverflow.Ellipsis
-                        )
-                    })
-                Tab(selected = pagerState.currentPage == 1,
-                    onClick = { scope.launch { pagerState.animateScrollToPage(1) } }, text = {
-                        Text(
-                            text = tabs[1], maxLines = 2, overflow = TextOverflow.Ellipsis
-                        )
-                    })
+                    text = { Text(text = tabs[0], maxLines = 2, overflow = TextOverflow.Ellipsis) },
+                )
+                Tab(
+                    selected = pagerState.currentPage == 1,
+                    onClick = { scope.launch { pagerState.animateScrollToPage(1) } },
+                    text = { Text(text = tabs[1], maxLines = 2, overflow = TextOverflow.Ellipsis) },
+                )
             }
-            HorizontalPager(
-                modifier = Modifier.zIndex(-1f),
-                state = pagerState,
-            ) { selectedTabIndex ->
+            HorizontalPager(modifier = Modifier.zIndex(-1f), state = pagerState) { selectedTabIndex
+                ->
                 when (selectedTabIndex) {
-                    0 -> InteractionsTab(
-                        showSnackbar = { message, reset ->
-                            scope.launch {
-                                snackbarHostState.showSnackbar(message)
-                                reset()
-                            }
-                        }, itemId = itemId, recommId = recommId
-                    )
+                    0 ->
+                        InteractionsTab(
+                            showSnackbar = { message, reset ->
+                                scope.launch {
+                                    snackbarHostState.showSnackbar(message)
+                                    reset()
+                                }
+                            },
+                            itemId = itemId,
+                            recommId = recommId,
+                        )
 
                     1 -> ItemsToItemTab(itemId, navActions)
                 }

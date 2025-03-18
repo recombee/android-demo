@@ -17,6 +17,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import kotlin.math.roundToInt
 
 @Composable
 fun RatingBottomSheet(onSend: (rating: Double) -> Unit) {
@@ -32,7 +33,7 @@ fun RatingBottomSheet(onSend: (rating: Double) -> Unit) {
         Slider(
             modifier = Modifier.semantics { contentDescription = "Localized Description" },
             value = rating,
-            onValueChange = { rating = Math.round(it * 100f) / 100f },
+            onValueChange = { rating = (it * 100f).roundToInt() / 100f },
             valueRange = -1f..1f,
             steps = 49,
         )
